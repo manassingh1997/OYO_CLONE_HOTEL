@@ -1,0 +1,45 @@
+{% extends 'utils/vendor_base.html' %}
+
+
+{% block start %}
+<div class="container mt-5 ">
+    <div class="mx-auto col-6 text-center mb-5">
+        <a href="{% url 'add_hotel' %}" class="btn btn-success">Add Hotels</a>
+    </div>
+    <div class="row">
+    {% for hotel in hotels%}
+    
+        <div class="col-md-3 mt-4">
+            <div class="card shadow">
+                {% if hotel.hotel_images.first %}
+                <img src="/media/{{hotel.hotel_images.first.image}}" class="card-img-top" alt="..." style="height:200px;">
+                {% else%}
+
+                <img src="https://img.freepik.com/premium-vector/no-photo-available-vector-icon-default-image-symbol-picture-coming-soon-web-site-mobile-app_87543-10639.jpg" class="card-img-top" alt="..." style="height:200px;">
+
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title">{{hotel.hotel_name}}</h5>
+
+                  {% for ameneti in hotel.ameneties.all %}
+                  <span class="badge text-bg-primary"><img src="{{ameneti.icon}}" alt="">{{ameneti.amenetie_name}}</span>
+                {%endfor%}
+                </div>
+                <a href="{% url 'upload_images' hotel.hotel_slug %}" class="btn btn-success">Image</a>
+                <a href="{% url 'edit_hotel' hotel.hotel_slug %}" class="btn btn-warning">Edit</a>
+
+              </div>
+        </div>
+    {% endfor %}
+
+    <ul class="list-group mt-5">
+        {% for booking in bookings %}
+
+            <li class="list-group-item">Start Date - {{booking.booking_start_date}} End Date- {{booking.booking_end_date}}</li>
+            
+            
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

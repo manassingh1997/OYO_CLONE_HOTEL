@@ -1,0 +1,54 @@
+{% extends "utils/vendor_base.html" %}
+
+
+{% block start %}
+
+<div class="container mt-5 pt-5 pb-5">
+
+  <div class="col-6 mx-auto card shadow p-4" style="border:none; ">
+    <h2>Add Hotel</h2>  
+    <form method="POST">
+        {% include 'utils/alerts.html' %}
+        {% csrf_token %}
+          <div class="mb-3">
+            <label for="hotel_name" class="form-label">Hotel Name</label>
+            <input type="text" class="form-control" id="email" aria-describedby="emailHelp" name="hotel_name">
+          </div>
+          <div class="form-floating">
+            <textarea class="form-control" name="hotel_description" placeholder="Leave a comment here" id="hotel_description"></textarea>
+            <label for="hotel_description">Hotel Description</label>
+          </div>
+          
+          <div class="mb-3">
+            <label for="hotel_price" class="form-label">Hotel Price</label>
+            <input type="number" class="form-control" id="hotel_price" name="hotel_price">
+          </div>
+          
+          <div class="mb-3">
+
+          <label for="hotel_ameneties" class="form-label">Hotel Ameneties</label>
+
+          <select name="amenetie" id="hotel_ameneties" class="form-select" multiple aria-label="Default select example">
+            {% for amenetie in ameneties%}
+            
+            <option value="{{amenetie.id}}">{{amenetie.amenetie_name}}</option>
+
+            {% endfor%}
+          </select>
+        </div>
+
+          <div class="mb-3">
+            <label for="hotel_offer_price" class="form-label">Hotel Offer Price</label>
+            <input type="number" class="form-control" id="hotel_offer_price" name="hotel_offer_price">
+          </div>
+          <div class="mb-3">
+            <label for="hotel_location" class="form-label">Hotel Location</label>
+            <input type="text" class="form-control" id="hotel_location" name="hotel_location">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+  </div>
+
+</div>
+
+{% endblock %}

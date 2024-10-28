@@ -1,0 +1,94 @@
+{% extends "utils/base.html" %}
+
+
+{% block start %}
+
+<div class="container mt-5 pt-5 pb-5">
+
+    <div class="col-6 mx-auto card shadow p-4" style="border:none; ">
+        <h2>VENDOR REGISTER</h2>  
+        <form method="POST">
+          {% include 'utils/alerts.html' %}
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="firstname" class="form-label">First Name</label>
+            <input type="text" class="form-control" name="first_name" id="firstname" required>
+          </div>
+          <div class="mb-3">
+            <label for="lastname" class="form-label">Last Name</label>
+            <input type="text" class="form-control" name="last_name" id="lastname" required>
+          </div>
+          <div class="mb-3">
+            <label for="businessname" class="form-label">Business Name</label>
+            <input type="text" class="form-control" name="business_name" id="businessname" required>
+          </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Email address</label>
+              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" required>
+              <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+              <label for="ph_no" class="form-label">Phone Number</label>
+              <input type="number" name="phone_number" class="form-control" id="ph_no" aria-describedby="emailHelp" required>
+              <span id="phoneFeedback" style="color: red;"></span><br>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <span id="passwordFeedback" style="color: red;"></span><br>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  // AJAX for validation
+  $('#password').on('input',function(){
+    const password = $(this).val();
+    $.ajax({
+      url: "{% url 'validate_password_ajax' %}",
+      method:"POST",
+      data: {
+        'password':password,
+        'csrfmiddlewaretoken':'{{ csrf_token }}'
+      },
+      success: function(response){
+        if (response.valid){
+          $('#passwordFeedback').text('Password is valid').css('color','green');
+        } else {
+          $('#passwordFeedback').text(response.errors.join(', ')).css('color','red');
+        }
+
+      },
+      error: function(){
+        $('#passwordFeedback').text('Error validation password').css('color','red');
+      }
+    });
+  });
+
+  // AJAX for Phone number validation
+  $('#ph_no').on('input',function(){
+    const phoneNumber = $(this).val();
+    $.ajax({
+      url : "{% url 'validate_phone_ajax' %}",
+      method: "POST",
+      data: {
+        'phone_number': phoneNumber,
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+      },
+      success: function (response){
+        if (response.valid){
+          $('#phoneFeedback').text('Phone number is valid').css('color','green');
+        } else {
+          $('#phoneFeedback').text(response.error).css('color','red');
+        }
+      },
+      error: function(){
+        $('#phoneFeedback').text('Error validating phone number').css('color','red');
+      }
+    });
+  });
+</script>
+{% endblock %}
